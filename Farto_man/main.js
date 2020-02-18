@@ -1,25 +1,34 @@
+var man;
+
 var mainState = { //create the main state of the gamed
 
+    
     preload:function () { //This is used to load the images and the sounds and is called at the beginning
 
         game.load.image('Bird', 'assets/bird.png'); //loads the bird
+        game.load.image('Man', 'assets/Fart_man.png');
+        game.load.image('Fart_cloud', 'assets/Fart_cloud.jpg'); //https://www.hiclipart.com/free-transparent-background-png-clipart-ixbvh
         game.load.image('Pipe', 'assets/pipe.png'); //loads the pipe
-        game.load.audio('Jump', 'assets/jump.wav'); //loads the jump music
+        game.load.audio('Fart', 'assets/short_fart.wav'); //loads the jump music
         game.load.audio('Dead', 'assets/kaboom.wav'); //loads the dead music
-        //game.load.audio('Short_fart', 'assets/short_fart.wav');
     },
 
     create:function () { //This is used to set up the game, display the sprites, etc and is called after preload
 
-        game.state.backgroundColor = "#3ec2cf"; //sets the background to blue
+        //game.state.backgroundColor = "#FFFFFF"; //sets the background to blue
 
         game.physics.startSystem(Phaser.Physics.ARCADE); //set the physics system
 
-        this.bird = game.add.sprite(100, 245, 'Bird'); //this sets the bird sprite at position (100, 245)
+        man = game.add.sprite(100, 245, 'Man'); //this sets the bird sprite at position (100, 245)
 
-        game.physics.arcade.enable(this.bird); //adds physics to the bird
+        //man.body.setSize(40, 53, true);
+        
+        game.physics.arcade.enable(man); //adds physics to the bird
 
-        this.bird.body.gravity.y = 1000; //add gravity to the bird to make it fall
+        man.body.gravity.y = 1000; //add gravity to the bird to make it fall
+
+        this.fart_cloud = game.add.sprite(man.body.x - 40, man.body.y - 30, 'Fart_cloud');
+        this.fart_cloud.alpha = 0;
 
         var spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR); //adds functionality to the spacebar
 
@@ -33,51 +42,41 @@ var mainState = { //create the main state of the gamed
 
         this.labelScore = game.add.text(20, 20, "0", {font: "30px Arial", fill: "#ffffff"});
 
-        this.bird.anchor.setTo(-0.2, 0.5);
-
-        //this.jumpSound = game.add.audio('Short_fart');
-        this.jumpSound = game.add.audio('Jump');
+        this.fartSound = game.add.audio('Fart');
 
         this.deadSound = game.add.audio('Dead');
     },
 
     update:function () { //This is called 60 times per second and contains the game logic
 
-        if(this.bird.y < 0 || this.bird.y > 490){
+        if(man.y < 0 || man.y > 490){
             this.restartGame();
         }
 
-        game.physics.arcade.overlap(this.bird, this.pipes, this.hitPipe, null, this);
-
-        //This rotates the bird
-        if(this.bird.angle < 20){
-            this.bird.angle += 1;
-        }
+        game.physics.arcade.overlap(man, this.pipes, this.hitPipe, null, this);
     },
 
     jump:function () {
 
-        if(this.bird.alive == false){
+        if(man.alive === false){
             return;
         }
 
-        this.bird.body.velocity.y = -350; //adds vertical velocity to the bird
+        man.body.velocity.y = -350; //adds vertical velocity to the bird
 
-        //This adds the flapping animation to the bird
-        var animation = game.add.tween(this.bird);
-        animation.to({angle:20}, 100); //This changes the angle of the bird by 20 degrees in 100 milliseconds
-        animation.start(); //starts the animation
+        game.add.tween(this.fart_cloud).to( { alpha: 1, x: man.body.x - 40, y: man.body.y - 30}, 100, null, true, 0, 0, false);
 
-        this.jumpSound.play();
+        //game.add.tween(this.fart_cloud).to({alpha: 0}, 2500, Phaser.Easing.Linear.None, true)
+        this.fartSound.play();
     },
 
     hitPipe:function(){
 
-        if(this.bird.alive == false){
+        if(man.alive === false){
             return;
         }
 
-        this.bird.alive = false;
+        man.alive = false;
 
         this.deadSound.play();
 
