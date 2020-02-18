@@ -1,4 +1,5 @@
 var man;
+var timer;
 
 var mainState = { //create the main state of the gamed
 
@@ -43,6 +44,13 @@ var mainState = { //create the main state of the gamed
         this.fartSound = game.add.audio('Fart');
 
         this.deadSound = game.add.audio('Dead');
+
+        this.fart_cloud = game.add.sprite(man.body.x + 10, man.body.y - 30, 'Fart_cloud');
+        this.fart_cloud.alpha = 0;
+
+        //game.add.tween(this.fart_cloud).to( { alpha: 1, x: man.body.x - 40, y: man.body.y - 30}, 100, null, true, 0, 0, false);
+
+        //this.timer2=  game.time.events.loop(2000, this.destroy_fart, this);
     },
 
     update:function () { //This is called 60 times per second and contains the game logic
@@ -55,7 +63,6 @@ var mainState = { //create the main state of the gamed
     },
 
     jump:function () {
-
         if(man.alive === false){
             return;
         }
@@ -63,9 +70,9 @@ var mainState = { //create the main state of the gamed
         man.body.velocity.y = -350; //adds vertical velocity to the bird
 
         game.add.tween(this.fart_cloud).to( { alpha: 1, x: man.body.x - 40, y: man.body.y - 30}, 100, null, true, 0, 0, false);
-
-        //game.add.tween(this.fart_cloud).to({alpha: 0}, 2500, Phaser.Easing.Linear.None, true)
+        game.time.events.add(Phaser.Timer.SECOND - 200, this.destroy_fart, this);
         this.fartSound.play();
+
     },
 
     hitPipe:function(){
@@ -83,6 +90,10 @@ var mainState = { //create the main state of the gamed
         this.pipes.forEach(function(p){
             p.body.velocity.x = 0;
         }, this);
+    },
+
+    destroy_fart:function(){
+        game.add.tween(this.fart_cloud).to( { alpha: 0 }, 100, Phaser.Easing.Linear.None, true);
     },
 
     restartGame:function () {
@@ -124,7 +135,7 @@ var mainState = { //create the main state of the gamed
                 this.addOnePipe(400, i*60+10);
             }
 
-            if(i === hole || i === hole+1){
+            if(i === hole || i == hole+1){
                 this.addBeans(400, hole+10);
             }
 
