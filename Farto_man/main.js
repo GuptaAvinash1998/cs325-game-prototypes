@@ -190,7 +190,7 @@ var mainState = { //create the main state of the gamed
                 this.addOnePipe(400, i*60+10);
             }else{
 
-                if(i === hole && (bean_pop === 1 || bean_pop === 4)){
+                if(i === hole && bean_pop === 4){
 
                     this.addBeans(400, i*60+40);
                 }
