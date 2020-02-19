@@ -6,12 +6,12 @@ var mainState = { //create the main state of the gamed
     
     preload:function () { //This is used to load the images and the sounds and is called at the beginning
 
-        //game.load.image('Background', 'assets/background.png');
         game.load.image('Man', 'assets/Fart_man.png');
         game.load.image('Fart_cloud', 'assets/Fart_cloud.jpg'); //https://www.hiclipart.com/free-transparent-background-png-clipart-ixbvh
         game.load.image('Pipe', 'assets/pipe.png'); //loads the pipe
         game.load.audio('Fart', 'assets/short_fart.wav'); //loads the jump music
         game.load.audio('Dead', 'assets/kaboom.wav'); //loads the dead music
+        game.load.audio('Collect', 'assets/collect_sound.wav');
         game.load.image('Can_of_beans', 'assets/Can_of_beans.jpg');
     },
 
@@ -54,6 +54,8 @@ var mainState = { //create the main state of the gamed
 
         this.deadSound = game.add.audio('Dead');
 
+        this.collectSound = game.add.audio('Collect');
+
         this.fart_cloud = game.add.sprite(man.body.x + 10, man.body.y - 30, 'Fart_cloud');
         this.fart_cloud.alpha = 0;
     },
@@ -83,39 +85,38 @@ var mainState = { //create the main state of the gamed
 
     hitBeans:function(){
 
+        this.collectSound.play();
+
         game.add.tween(this.can).to( { alpha: 0}, 100, null, true, 0, 0, false);
 
         this.can_count += 1;
         this.labelCount.text = "Cans collected: " + (Math.floor(this.can_count/17));
 
-        console.log(Math.floor(this.can_count/17));
+        //console.log(Math.floor(this.can_count/17));
 
         if(Math.floor(this.can_count/17) === 2){
 
-            //man.body.enable = false;
+            man.body.enable = false;
 
-            this.pipes.enableBody = false;
+            //this.pipes.enableBody = false;
 
-            //game.time.events.add(Phaser.Timer.SECOND*7, this.deactivateShield, this);
-            console.log(Phaser.Timer.SECOND + 60000);
-            game.time.events.add(Phaser.Timer.SECOND + 60000, this.deactivateinvisiPipe(), this);
-            //this.activateBoost();
+            game.time.events.add(Phaser.Timer.SECOND*6, this.deactivateShield, this);
         }
     },
 
-    deactivateinvisiPipe:function(){
+    /**deactivateinvisiPipe:function(){
 
         console.log("enabling the pipes group again")
         this.pipes.enableBody = true;
         this.can_count = 0;
-    },
+    },**/
 
-    /**deactivateShield:function(){
+    deactivateShield:function(){
 
         man.body.enable = true;
 
         this.can_count = 0;
-    },**/
+    },
 
     hitPipe:function(){
 
