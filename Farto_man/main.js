@@ -121,7 +121,7 @@ var mainState = { //create the main state of the gamed
             p.body.velocity.x = 0;
         }, this);
 
-        this.beans.forEach(function (b) { .//so will the beans
+        this.beans.forEach(function (b) { //so will the beans
             b.body.velocity.x = 0;
         })
     },
