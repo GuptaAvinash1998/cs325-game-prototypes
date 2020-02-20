@@ -83,6 +83,10 @@ var mainState = { //create the main state of the gamed
 
     hitBeans:function(){
 
+        if(man.alive === false){
+            return;
+        }
+
         this.collectSound.play();
 
         game.add.tween(this.can).to( { alpha: 0}, 100, null, true, 0, 0, false); //when the beans are collected, it will dissapear
