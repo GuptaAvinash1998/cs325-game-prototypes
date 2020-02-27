@@ -44,7 +44,7 @@ GameStates.mainState = function(game){ //create the main state of the gamed
             cats.setAll('checkWorldBounds', true);
             cats.setAll('outOfWorldBoundsKill', true);
 
-            playerCat = game.add.sprite(10, game.world.centerY + 40, 'Cat');
+            playerCat = game.add.sprite(300, 300, 'Cat');
             playerCat.inputEnabled = true;
             playerCat.input.enableDrag(true);
             game.physics.arcade.enable(playerCat);
