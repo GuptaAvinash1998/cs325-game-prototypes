@@ -1,26 +1,3 @@
-/**var option_1;
-var option_2;
-var snow;
-
-var bootState = {
-
-    preload:function () {
-
-        game.load.image('Snowball', 'assets/snowBall.png');
-    },
-
-    create:function () {
-
-        snow = game.add.image(game.world.centerX, game.world.centerY, 'SnowBall');
-    }
-
-};
-
-var game = new Phaser.Game( 350, 350, Phaser.AUTO, 'game' );
-game.state.add('BootState', bootState);
-game.state.add('Game', mainState);
-
-//game.state.start('Game');**/
 var GameStates = {};
 var shared = {};
 
