@@ -1,164 +1,144 @@
-var man;
+var crazy_lady;
 var timer;
 var mouse;
+var cats;
+var angryCat;
+var playerCat;
+var net;
+var kitty_pur;
+var warning;
+var haha;
+var beat;
 
-var mainState = { //create the main state of the gamed
+GameStates.mainState = function(game){ //create the main state of the gamed
 
-    
-    preload:function () { //This is used to load the images and the sounds and is called at the beginning
+    return {
+        preload: function () { //This is used to load the images and the sounds and is called at the beginning
 
-        this.load.image('Background', 'assets/background.png')
-    },
+            //this.load.image('Background', 'assets/background.png');
+            this.load.image('Cat', 'assets/cat.png'); //https://www.iconfinder.com/icons/4050595/animal_cartoon_cat_face_head_pet_icon
+            this.load.image('Angry_Pusheen', 'assets/angry_push.jpg'); //https://www.hiclipart.com/free-transparent-background-png-clipart-hpiam
+            this.load.image('Crazy_cat_lady', 'assets/crazy_cat_lady.png'); //https://simpsons.fandom.com/wiki/Eleanor_Abernathy
+            this.load.audio('Meow', 'assets/meow.wav'); //https://freesound.org/people/InspectorJ/sounds/415209/
+            this.load.audio('HAHA', 'assets/haha-2.wav'); //http://www.geocities.ws/Nashville/Stage/6021/haha-2.wav
+            this.load.audio('Beat', 'assets/in_the_beat.wav'); //https://freesound.org/people/zagi2/sounds/223475/
 
-    create:function () { //This is used to set up the game, display the sprites, etc and is called after preload
 
-        game.add.image(0, 0, 'Background');
+        },
 
-        game.physics.startSystem(Phaser.Physics.ARCADE); //set the physics system
+        create: function () { //This is used to set up the game, display the sprites, etc and is called after preload
 
-        man = game.add.sprite(100, 245, 'Man'); //this sets the man sprite at position (100, 245)
-        
-        game.physics.arcade.enable(man); //adds physics to the man
-		
-		man.body.setSize(40, 53, true);
-		man.body.collideWorldBounds = true;
-    },
+            game.physics.startSystem(Phaser.Physics.ARCADE); //set the physics system
 
-    update:function () { //This is called 60 times per second and contains the game logic
+            crazy_lady = game.add.sprite(0, 0, 'Crazy_cat_lady'); //this sets the crazy_lady sprite at position (100, 245)
 
-        man.rotation = game.physics.arcade.accelerateToPointer(man, game.input.activePointer, 900, 900);
-    },
+            game.physics.arcade.enable(crazy_lady); //adds physics to the crazy_lady
 
-    /**follow:function(pointer){
+            crazy_lady.body.setSize(40, 53, true);
+            crazy_lady.body.collideWorldBounds = true;
+            crazy_lady.anchor.setTo(0.5, 0.5);
 
-        game.add.tween(man).to( { x: }, 100, null, true, 0, 0, false);
-    },**/
-    /**jump:function () {
-        if(man.alive === false){
-            return;
-        }
+            cats = game.add.group();
+            cats.enableBody = true;
+            cats.physicsBodyType = Phaser.Physics.ARCADE;
+            cats.setAll('checkWorldBounds', true);
+            cats.setAll('outOfWorldBoundsKill', true);
 
-        man.body.velocity.y = -350; //adds vertical velocity to the bird
+            playerCat = game.add.sprite(10, game.world.centerY + 40, 'Cat');
+            playerCat.inputEnabled = true;
+            playerCat.input.enableDrag(true);
+            game.physics.arcade.enable(playerCat);
 
-        game.add.tween(this.fart_cloud).to( { alpha: 1, x: man.body.x - 40, y: man.body.y - 30}, 100, null, true, 0, 0, false); //everytime you jump, the fart cloud will appear for 0.8 seconds and dissapear
-        game.time.events.add(Phaser.Timer.SECOND - 200, this.destroy_fart, this);
-        this.fartSound.play();
+            game.time.events.repeat(Phaser.Timer.SECOND * 2, Number.POSITIVE_INFINITY, this.throw_cats, this);
 
-    },
+            kitty_pur = game.add.audio('Meow');
 
-    hitBeans:function(){
+            //game.time.events.repeat(Phaser.Timer.SECOND * )
+            warning = game.add.text(0, game.world.centerY - 100, "PLEASE CLICK THE CAT!!",
+                {font: "30px Arial", fill: "#ff0044", align: "left"});
+            warning.alpha = 0;
 
-        if(man.alive === false){
-            return;
-        }
+            haha = game.add.audio('HAHA');
+            beat = game.add.audio('Beat');
+            beat.play();
 
-        this.collectSound.play();
+        },
 
-        game.add.tween(this.can).to( { alpha: 0}, 100, null, true, 0, 0, false); //when the beans are collected, it will dissapear
+        update: function () { //This is called 60 times per second and contains the game logic
 
-        this.can_count += 1;
-        this.labelCount.text = "Cans collected: " + (Math.floor(this.can_count/17)); //the can count will increase and will be displayed
+            //net.rotation = game.physics.arcade.accelerateToPointer(net, game.input.activePointer, 900, 900);
+            crazy_lady.rotation = game.physics.arcade.accelerateToPointer(crazy_lady, game.input.activePointer, 1100, 1100);
 
-        if(Math.floor(this.can_count/17) === 2){
+            if (!this.input.activePointer.isDown) {
 
-            man.body.enable = false; //when the can count is two, then the physics of the man will be diabled and this after 6 seconds it will be enabled again.
+                game.add.tween(warning).to({alpha: 1}, 20, "Linear", true);
+            } else {
+                game.add.tween(warning).to({alpha: 0}, 20, "Linear", true);
+            }
 
-            game.time.events.add(Phaser.Timer.SECOND*6, this.deactivateShield, this); //after 6 seconds it will activate the physics
-        }
-    },
+            game.physics.arcade.overlap(playerCat, crazy_lady, this.deathCase1, null, this);
+            game.physics.arcade.overlap(playerCat, cats, this.deathCase2, null, this);
 
-    deactivateShield:function(){
+        },
 
-        man.body.enable = true; //enables the physics
+        throw_cats: function () {
 
-        this.can_count = 0; //resets the can count
-    },
+            //cats.createMultiple(4, 'cats');
+            let i = 0;
+            for (; i < 4; i++) {
 
-    hitPipe:function(){
+                if (i === 0) {
 
-        if(man.alive === false){
-            return;
-        }
+                    angryCat = game.add.sprite(crazy_lady.body.x + 10, crazy_lady.body.y, 'Angry_Pusheen');
+                    cats.add(angryCat);
+                    game.physics.enable(angryCat, Phaser.Physics.ARCADE);
+                    angryCat.body.velocity.x = 500;
+                }
 
-        man.alive = false;
+                if (i === 1) {
+                    angryCat = game.add.sprite(crazy_lady.body.x - 10, crazy_lady.body.y, 'Angry_Pusheen');
+                    cats.add(angryCat);
+                    game.physics.enable(angryCat, Phaser.Physics.ARCADE);
+                    angryCat.body.velocity.x = -500;
+                }
 
-        this.deadSound.play();
+                if (i === 2) {
+                    angryCat = game.add.sprite(crazy_lady.body.x, crazy_lady.body.y + 10, 'Angry_Pusheen');
+                    cats.add(angryCat);
+                    game.physics.enable(angryCat, Phaser.Physics.ARCADE);
+                    angryCat.body.velocity.y = 500;
+                }
 
-        game.time.events.remove(this.timer);
-
-        this.pipes.forEach(function(p){ //when the man hits the pipes, the man will not be alive and the pipes will stop moving 
-            p.body.velocity.x = 0;
-        }, this);
-
-        this.beans.forEach(function (b) { //so will the beans
-            b.body.velocity.x = 0;
-        })
-    },
-
-    destroy_fart:function(){
-        game.add.tween(this.fart_cloud).to( { alpha: 0 }, 100, Phaser.Easing.Linear.None, true); //makes the fart cloud dissapear
-    },**/
-
-    restartGame:function () { //restarts the game
-        game.state.start('main');
-    },
-
-    /**addOnePipe:function (x, y) { //This adds a pipe into the world
-
-        this.pipe = game.add.sprite(x, y, 'Pipe'); //adds the pipe sprite
-
-        this.pipes.add(this.pipe); //adds the pipe sprite to the group
-
-        game.physics.arcade.enable(this.pipe); //enables the physics to the pipe
-
-        this.pipe.body.velocity.x = -200; //add velocity of the pipe to make it move left
-
-        //kills the pipe when it is out of bounds
-        this.pipe.checkWorldBounds = true;
-        this.pipe.outOfBoundsKill = true;
-    },
-
-    addBeans:function(x, y){ //does the same function as the addOnePipe, except for the beans group
-
-        this.can = game.add.sprite(x, y, 'Can_of_beans');
-
-        this.beans.add(this.can);
-
-        game.physics.enable(this.can);
-
-        this.can.body.velocity.x = -200;
-
-        this.can.checkWorldBounds = true;
-        this.can.outOfBoundsKill = true;
-    },
-
-    addRowOfPipes: function () { //This adds multiple pipes at the same time
-
-        var hole = Math.floor(Math.random() * 5) + 1; //Picks a number between one and 5
-        //This is where the hole is going to be for the bird to move through
-
-        var bean_pop = Math.floor(Math.random() * 5) + 1;
-
-        for (var i=0; i<8; i++){
-
-            if(i !== hole && i !== hole+1){
-                this.addOnePipe(400, i*60+10);
-            }else{
-
-                if(i === hole && bean_pop === 4){
-
-                    this.addBeans(400, i*60+40);
+                if (i === 3) {
+                    angryCat = game.add.sprite(crazy_lady.body.x, crazy_lady.body.y - 10, 'Angry_Pusheen');
+                    cats.add(angryCat);
+                    game.physics.enable(angryCat, Phaser.Physics.ARCADE);
+                    angryCat.body.velocity.y = -500;
                 }
             }
 
-            this.score++;
-            this.labelScore.text = (this.score / 8) - 1;
+            kitty_pur.play();
+
+        },
+
+        deathCase1: function () {
+
+            haha.play();
+            beat.stop();
+            game.state.start('Lose');
+        },
+
+        deathCase2: function () {
+
+            haha.play();
+            beat.stop();
+            game.state.start('Lose');
         }
-    }**/
+    }
 };
 
-var game = new Phaser.Game(350, 350); //Initializes Phaser and creates a 400px by 490px game
+//var game = new Phaser.Game(350, 350); //Initializes Phaser and creates a 400px by 490px game
 
-game.state.add('main', mainState); //adds the main state and calls it 'main'
+//game.state.add('main', mainState); //adds the main state and calls it 'main'
 
-game.state.start('main'); //start the state to actually start the game
+//game.state.start('main'); //start the state to actually start the game
