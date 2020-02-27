@@ -67,7 +67,7 @@ GameStates.mainState = function(game){ //create the main state of the gamed
         update: function () { //This is called 60 times per second and contains the game logic
 
             //net.rotation = game.physics.arcade.accelerateToPointer(net, game.input.activePointer, 900, 900);
-            crazy_lady.rotation = game.physics.arcade.accelerateToPointer(crazy_lady, game.input.activePointer, 800, 800);
+            crazy_lady.rotation = game.physics.arcade.accelerateToPointer(crazy_lady, game.input.activePointer, 600, 600);
 
             if (!this.input.activePointer.isDown) {
 
