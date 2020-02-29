@@ -30,7 +30,7 @@ GameStates.mainState = function(game){ //create the main state of the gamed
 
             game.physics.startSystem(Phaser.Physics.ARCADE); //set the physics system
 
-            crazy_lady = game.add.sprite(0, 0, 'Crazy_cat_lady'); //this sets the crazy_lady sprite at position (100, 245)
+            crazy_lady = game.add.sprite(-20, -20, 'Crazy_cat_lady'); //this sets the crazy_lady sprite at position (100, 245)
 
             game.physics.arcade.enable(crazy_lady); //adds physics to the crazy_lady
 
@@ -44,7 +44,7 @@ GameStates.mainState = function(game){ //create the main state of the gamed
             cats.setAll('checkWorldBounds', true);
             cats.setAll('outOfWorldBoundsKill', true);
 
-            playerCat = game.add.sprite(300, 300, 'Cat');
+            playerCat = game.add.sprite(300, 220, 'Cat');
             playerCat.inputEnabled = true;
             playerCat.input.enableDrag(true);
             game.physics.arcade.enable(playerCat);
