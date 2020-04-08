@@ -7,6 +7,8 @@ var jumpTimer = 0;
 var cursor;
 var spaceKey;
 var cardinal_keys;
+var move_instructions_man;
+var move_instructions_woman
 
 var mainState = { //create the main state of the gamed
     
@@ -22,6 +24,19 @@ var mainState = { //create the main state of the gamed
 
         game.state.backgroundColor = "#000000"; //sets the background to black
 
+        move_instructions_man = game.add.text(447, 10, "For Man \nLEFT ARROW - Move left \nRIGHT ARROW - Move right" +
+            "\n UP ARROW - Jump \n SPACE BAR - Attack ", {
+            font: "bold 15px Arial",
+            fill: "#FFFFFF",
+            align: "left"
+        });
+
+        move_instructions_woman = game.add.text(10, 10, "For Woman \n A- Move left \n D - Move right" +
+            "\n W - Jump \n ESC - Attack", {
+            font: "bold 15px Arial",
+            fill: "#FFFFFF",
+            align: "left"
+        });
         game.physics.startSystem(Phaser.Physics.ARCADE); //set the physics system
 
         game.world.setBounds(0,0,696,448);
@@ -67,12 +82,6 @@ var mainState = { //create the main state of the gamed
         woman1.animations.add('punch_right', [14,15,16,17,18,19]);
         woman1.animations.add('hurt_right', [38,39,40]);
         woman1.animations.add('hurt_left', [41,42,43]);
-
-        /**man1.body.onCollide = new Phaser.Signal();
-        woman1.body.onCollide = new Phaser.Signal();
-
-        man1.body.onCollide.add(this.hitSprite, this);
-        woman1.body.onCollide.add(this.hitSprite, this);**/
 
         cursor = game.input.keyboard.createCursorKeys();
         spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
