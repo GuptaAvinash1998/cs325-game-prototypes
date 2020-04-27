@@ -21,7 +21,7 @@ var x;
 var y;
 var tp;
 
-import io from 'socket.io-client'
+import io from 'socket.io-client';
 GameStates.mainState = function (game) { //create the main state of the gamed
 
     return {
