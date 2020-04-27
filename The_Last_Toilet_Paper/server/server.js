@@ -1,6 +1,17 @@
 var express = require('express');
+var https = require('https');
+var fs = require('fs');
+
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/vortexcloud.online/privkey.pem','utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/vortexcloud.online/fullchain.pem','utf8');
+
+const credentials = {
+    key: privatekey,
+    ca: ca
+});
+
 var app = express();
-var server = require('http').Server(app);
+var server = https.createServer(credentials, app);
 var io = require('socket.io').listen(server);
 
 app.use(express.static('../client'));
@@ -60,6 +71,6 @@ io.on('connection', function (socket) {
     });
 });
 
-server.listen(8081, function () {
+server.listen(9000, function () {
     console.log(`Listening on ${server.address().port}`);
 });
