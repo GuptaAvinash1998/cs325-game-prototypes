@@ -3,9 +3,10 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
 
-app.use(express.static('client'));
-app.use(express.static('client/assets'));
-app.use(express.static('client/js'));
+app.use(express.static('../client'));
+app.use(express.static('../client/assets'));
+app.use(express.static('../client/js'));
+app.use(express.static(__dirname, { dotfiles: 'allow' } ));
 
 app.get('/', function (req, res) {
     res.sendFile(__dirname + 'client/index.html');
