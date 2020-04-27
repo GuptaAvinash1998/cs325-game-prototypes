@@ -8,7 +8,7 @@ const ca = fs.readFileSync('/etc/letsencrypt/live/vortexcloud.online/fullchain.p
 const credentials = {
     key: privatekey,
     ca: ca
-});
+};
 
 var app = express();
 var server = https.createServer(credentials, app);
