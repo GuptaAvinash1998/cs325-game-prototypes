@@ -56,7 +56,7 @@ GameStates.mainState = function (game) { //create the main state of the gamed
             characters.push(man1);
             characters.push(woman1);            
 
-            this.socket = io('https://vortexcloud.online:9000/', { secure: true });
+            this.socket = io('https://vortexcloud.online:80/', { secure: true });
 
             let i = 140;
 
