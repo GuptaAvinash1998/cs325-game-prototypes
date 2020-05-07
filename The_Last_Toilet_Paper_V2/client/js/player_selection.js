@@ -19,7 +19,7 @@ GameStates.selectionState = function (game) {
 
             game.load.spritesheet('Woman1', 'assets/GraveRobber/GraveRobber.png', 48, 48, 26);
             game.load.spritesheet('Man1', 'assets/SteamMan/SteamMan.png', 48, 48, 42);
-            game.load.spritesheet('Man2', 'assets/WoodCutter/Woodcutter.png', 48, 48, 50);
+            game.load.spritesheet('Man2', 'assets/Woodcutter/Woodcutter.png', 48, 48, 50);
             game.load.spritesheet('Woman2', 'assets/Woman/Woman.png', 48, 48, 32);
         },
 
