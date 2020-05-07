@@ -15,9 +15,10 @@ window.onload = function () {
     // the high score if you want.
 
     game.state.add('MainMenu', GameStates.menuState(game, shared));
-    game.state.add('FreePlay', GameStates.freePlayState(game, shared));
     game.state.add('Game', GameStates.mainState(game, shared));
     game.state.add('SelectState', GameStates.selectionState(game, shared));
+    game.state.add('VictoryState1', GameStates.victoryState1(game));
+    game.state.add('VictoryState2', GameStates.victoryState2(game));
 
     //	Now start the Boot state.
     game.state.start('MainMenu');
